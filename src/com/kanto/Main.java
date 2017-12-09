@@ -1,4 +1,4 @@
-/*
+package com.kanto;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -135,7 +135,7 @@ public class Main {
             }
             DF var = new DF(0);
             var.setDf(t.length - 1);
-            //insert into hashmap both the DF and weights of each term
+            //insert into hashmap both the com.kanto.DF and weights of each term
             df.put(t[0], var);
             map.put(t[0], d);
         }

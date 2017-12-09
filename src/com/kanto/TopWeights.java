@@ -1,3 +1,5 @@
+package com.kanto;
+
 public class TopWeights {
     private String word;
     private Double weight;
@@ -25,7 +27,7 @@ public class TopWeights {
 
     @Override
     public String toString() {
-        return "TopWeights{" +
+        return "com.kanto.TopWeights{" +
                 "word='" + word + '\'' +
                 ", weight=" + weight +
                 '}';

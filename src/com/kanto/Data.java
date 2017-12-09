@@ -1,4 +1,4 @@
-/*
+package com.kanto;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -34,7 +34,7 @@ public class Data {
 
     @Override
     public String toString() {
-        return "Data{" + "info=" + info + '}';
+        return "com.kanto.Data{" + "info=" + info + '}';
     }
 
 }
