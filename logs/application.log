@@ -1,0 +1,360 @@
+2017-12-12 18:12:43,701 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:12:44,071 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:12:44,240 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:12:44,241 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:12:44,241 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:12:44,241 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:12:44,332 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:12:46,898 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [545.60];
+
+2017-12-12 18:12:46,921 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:12:46,961 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:12:46,962 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:12:46,962 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:12:46,964 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:12:51,363 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:12:51,363 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 4399 ms
+
+2017-12-12 18:14:01,875 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:14:02,220 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:14:02,453 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:14:02,454 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:14:02,454 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:14:02,454 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:14:02,567 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:14:05,160 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [542.01];
+
+2017-12-12 18:14:05,182 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:14:05,267 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:14:05,268 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:14:05,268 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:14:05,270 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:14:11,792 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:14:11,792 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 6522 ms
+
+2017-12-12 18:25:48,160 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:25:48,512 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:25:48,740 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:25:48,741 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:25:48,741 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:25:48,741 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:25:48,845 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:25:51,377 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [552.92];
+
+2017-12-12 18:25:51,386 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:25:51,467 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:25:51,468 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:25:51,472 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:25:51,474 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:25:57,825 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:25:57,825 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 6351 ms
+
+2017-12-12 18:29:42,254 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:29:42,659 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:29:42,836 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:29:42,837 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:29:42,837 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:29:42,837 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:29:42,917 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:29:45,402 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [563.38];
+
+2017-12-12 18:29:45,425 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:29:45,478 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:29:45,479 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:29:45,479 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:29:45,481 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:29:50,520 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:29:50,520 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 5039 ms
+
+2017-12-12 18:32:19,641 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:32:19,944 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:32:20,111 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:32:20,112 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:32:20,112 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:32:20,112 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:32:20,200 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:32:22,735 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [552.27];
+
+2017-12-12 18:32:22,744 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:32:22,827 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:32:22,828 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:32:22,828 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:32:22,830 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:32:28,944 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:32:28,944 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 6114 ms
+
+2017-12-12 18:33:47,029 - [INFO] - from org.nd4j.linalg.factory.Nd4jBackend in main
+                
+Loaded [CpuBackend] backend
+
+2017-12-12 18:33:47,327 - [INFO] - from org.nd4j.nativeblas.NativeOpsHolder in main
+                
+Number of threads used for NativeOps: 4
+
+2017-12-12 18:33:47,501 - [INFO] - from org.nd4j.nativeblas.Nd4jBlas in main
+                
+Number of threads used for BLAS: 4
+
+2017-12-12 18:33:47,504 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Backend used: [CPU]; OS: [Linux]
+
+2017-12-12 18:33:47,505 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Cores: [4]; Memory: [1.7GB];
+
+2017-12-12 18:33:47,505 - [INFO] - from org.nd4j.linalg.api.ops.executioner.DefaultOpExecutioner in main
+                
+Blas vendor: [OPENBLAS]
+
+2017-12-12 18:33:47,611 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting vocabulary building...
+
+2017-12-12 18:33:50,138 - [INFO] - from org.deeplearning4j.models.word2vec.wordstore.VocabConstructor in main
+                
+Sequences checked: [1400], Current vocabulary size: [2927]; Sequences/sec: [554.24];
+
+2017-12-12 18:33:50,148 - [INFO] - from org.deeplearning4j.models.embeddings.loader.WordVectorSerializer in main
+                
+Projected memory use for model: [2.23 MB]
+
+2017-12-12 18:33:50,172 - [INFO] - from org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable in main
+                
+Initializing syn1...
+
+2017-12-12 18:33:50,172 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Building learning algorithms:
+
+2017-12-12 18:33:50,172 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+          building ElementsLearningAlgorithm: [SkipGram]
+
+2017-12-12 18:33:50,174 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Starting learning process...
+
+2017-12-12 18:33:56,125 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Epoch [1] finished; Elements processed so far: [208172];  Sequences processed: [1398]
+
+2017-12-12 18:33:56,125 - [INFO] - from org.deeplearning4j.models.sequencevectors.SequenceVectors in main
+                
+Time spent on training: 5951 ms
+

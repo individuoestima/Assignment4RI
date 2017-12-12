@@ -102,32 +102,6 @@ public class RankedRetrieval {
 
         //ROCCHIO FEEDBACK
 
-        //get top terms in relevant documents
-        ArrayList<TopWeights> top = new ArrayList<>();
-        for (int i = 0; i < relevant.size(); i++) {
-            for (Map.Entry<String, Data> x : map.entrySet()) {
-                if (x.getValue().getInfo().containsKey(relevant.get(i))) {
-                    top.add(new TopWeights(x.getKey(), x.getValue().getInfo().get(relevant.get(i))));
-                }
-            }
-        }
-        //sort heavier
-        top.sort((o1, o2) -> o2.getWeight().compareTo(o1.getWeight()));
-        //System.out.println(top.toString());
-
-        //Add heavier terms to query with weight 0.0 since we only want beta* (their real value)/DR
-        int counter = 0;
-        for (int i = 0; i < top.size(); i++) {
-            if (!temp.containsKey(top.get(i).getWord())) {
-                temp.put((top.get(i).getWord()), 0.0);
-                text.add(top.get(i).getWord());
-                counter++;
-            }
-            if (counter == 3) {
-                break;
-            }
-        }
-
         //In class ,alpha = 1, so we did not added it here.
         double beta;
         double sigma = 0.1;
@@ -159,6 +133,31 @@ public class RankedRetrieval {
                     }
                 }
             }
+        }
+
+        //get top terms in relevant documents
+        ArrayList<TopWeights> top = new ArrayList<>();
+        for (int i = 0; i < relevant.size(); i++) {
+            for (Map.Entry<String, Data> x : map.entrySet()) {
+                if (x.getValue().getInfo().containsKey(relevant.get(i))) {
+                    top.add(new TopWeights(x.getKey(), x.getValue().getInfo().get(relevant.get(i))));
+                }
+            }
+        }
+        //sort heavier
+        top.sort((o1, o2) -> o2.getWeight().compareTo(o1.getWeight()));
+
+        //Add heavier terms to query
+        for (int i = 0; i < top.size(); i++) {
+            if (!temp.containsKey(top.get(i).getWord())) {
+                temp.put((top.get(i).getWord()), top.get(i).getWeight());
+                text.add(top.get(i).getWord());
+            }
+            else{
+                temp.put((top.get(i).getWord()), temp.get(top.get(i).getWord()) + top.get(i).getWeight());
+            }
+            if(i == 3)
+                break;
         }
 
         //get score

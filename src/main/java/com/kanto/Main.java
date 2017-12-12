@@ -7,12 +7,12 @@ package com.kanto;/*
 import java.io.*;
 import java.util.*;
 
-/*import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;*/
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 
 /**
  * @author kanto
@@ -161,7 +161,7 @@ public class Main {
         }
     }
 
-    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> ranking, int total) throws IOException {
+    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> ranking, int total, Word2Vec vec) throws IOException {
         //Rank queries
         FileReader fr = new FileReader(fQuery);
         BufferedReader br = new BufferedReader(fr);
@@ -171,6 +171,13 @@ public class Main {
         while ((line = br.readLine()) != null) {
             ArrayList<String> text = mt.remove(line);
             RankedRetrieval r = new RankedRetrieval(total);
+            //expand query
+            Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            for (int i = 1;i<text.size();i++){
+                lst.addAll(vec.wordsNearest(text.get(i),3));
+            }
+            text.addAll(lst);
+            lst.clear();
             //get ranking based on tf-idf ranked retrieval method
             r.ranking(map, text, df);
             //insert into hashmap
@@ -189,7 +196,7 @@ public class Main {
         return documents;
     }
 
-    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores) throws IOException {
+    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec) throws IOException {
 
         //Rerank queries
         FileReader fr = new FileReader(fQuery);
@@ -218,6 +225,13 @@ public class Main {
                 Relevant = docs;
                 nonRelevant.clear();
             }
+            //expand query
+            Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            for (int i = 1;i<text.size();i++){
+                lst.addAll(vec.wordsNearest(text.get(i),3));
+            }
+            text.addAll(lst);
+            lst.clear();
             //recalculate ranking with the feedback we have
             r.rocchioFeedback(map, text, df, Relevant, nonRelevant, flag, relevanceScores, idQuery);
             idQuery += 1;
@@ -280,7 +294,7 @@ public class Main {
         HashMap<Integer, Data> relevanceScores = new HashMap<>();
         readRelevance(relevanceScores, fRelevance);
 
-        /*String file = "cranfield_sentences.txt";
+        String file = "cranfield_sentences.txt";
         if(!(new File(file).exists())){
             System.out.println("Ficheiro cranfield_sentences.txt não encontrado!");
         }
@@ -297,15 +311,13 @@ public class Main {
                 .tokenizerFactory(t)
                 .build();
         vec.fit();
-        Collection<String> lst = vec.wordsNearest("light", 10);
-        System.out.println(lst);*/
 
         //Rank documents for each query
         HashMap<Integer, RankedRetrieval> ranking = new HashMap<>();
-        rankQ(fQuery, mt, map, df, ranking, listOfFiles.length);
+        rankQ(fQuery, mt, map, df, ranking, listOfFiles.length,vec);
 
         //get feedback and recalculate scores based on it
-        Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores);
+        Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec);
 
         toFile(ranking, args[3]);
     }
