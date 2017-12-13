@@ -54,11 +54,8 @@ public class Main {
             for (int j = 0; j < text.size(); j++) {
                 //get word
                 String textaux = text.get(j);
-                if (textaux.equals("")) {
-                    continue;
-                }
                 //obtain df of each term
-                if (!df.containsKey(textaux)) {
+                /*if (!df.containsKey(textaux)) {
                     DF var = new DF(i);
                     df.put(textaux, var);
                 } else {
@@ -66,7 +63,7 @@ public class Main {
                         df.get(textaux).setCheck(i);
                         df.get(textaux).incDf();
                     }
-                }
+                }*/
                 //insert into hashmap occurrences
                 if (!temp.containsKey(textaux)) {
                     Data d = new Data();
@@ -77,6 +74,8 @@ public class Main {
                     temp.get(textaux).addInfo(i + 1);
                 }
             }
+
+
 
             //calculate tf
             double sum = 0;
@@ -161,7 +160,7 @@ public class Main {
         }
     }
 
-    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> ranking, int total, Word2Vec vec) throws IOException {
+    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> ranking, Word2Vec vec) throws IOException {
         //Rank queries
         FileReader fr = new FileReader(fQuery);
         BufferedReader br = new BufferedReader(fr);
@@ -170,14 +169,14 @@ public class Main {
         //read query
         while ((line = br.readLine()) != null) {
             ArrayList<String> text = mt.remove(line);
-            RankedRetrieval r = new RankedRetrieval(total);
+            RankedRetrieval r = new RankedRetrieval();
             //expand query
-            Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            /*Collection<String> lst = vec.wordsNearest(text.get(0),3);
             for (int i = 1;i<text.size();i++){
                 lst.addAll(vec.wordsNearest(text.get(i),3));
             }
             text.addAll(lst);
-            lst.clear();
+            lst.clear();*/
             //get ranking based on tf-idf ranked retrieval method
             r.ranking(map, text, df);
             //insert into hashmap
@@ -226,15 +225,21 @@ public class Main {
                 nonRelevant.clear();
             }
             //expand query
-            Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            /*Collection<String> lst = vec.wordsNearest(text.get(0),3);
             for (int i = 1;i<text.size();i++){
                 lst.addAll(vec.wordsNearest(text.get(i),3));
             }
             text.addAll(lst);
-            lst.clear();
+            lst.clear();*/
             //recalculate ranking with the feedback we have
             r.rocchioFeedback(map, text, df, Relevant, nonRelevant, flag, relevanceScores, idQuery);
             idQuery += 1;
+        }
+    }
+
+    private static void calculateIDF(HashMap<String, Data> map, HashMap<String, DF> df, int total) {
+        for (HashMap.Entry<String,Data> entry : map.entrySet()){
+            df.get(entry.getKey()).setDf(Math.log10(total / df.get(entry.getKey()).getDf()));
         }
     }
 
@@ -312,9 +317,11 @@ public class Main {
                 .build();
         vec.fit();
 
+        calculateIDF(map,df,listOfFiles.length);
+
         //Rank documents for each query
         HashMap<Integer, RankedRetrieval> ranking = new HashMap<>();
-        rankQ(fQuery, mt, map, df, ranking, listOfFiles.length,vec);
+        rankQ(fQuery, mt, map, df, ranking,vec);
 
         //get feedback and recalculate scores based on it
         Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec);

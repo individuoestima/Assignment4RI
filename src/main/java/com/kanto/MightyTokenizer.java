@@ -41,24 +41,15 @@ public class MightyTokenizer {
         boolean check;
         String[] text = s.split(" ");
         for (String text1 : text) {
-            check = false;
-            for (int j = 0; j < stopWords.size(); j++) {
-                if (text1.equals(stopWords.get(j))) {
-                    check = true;
-                    break;
-                }
+            if(stopWords.contains(text1) || text1.equals("")){
+                continue;
             }
-            if (check == false) {
-                CleanText.add(text1);
+            else{
+                englishStemmer stemmer = new englishStemmer();
+                stemmer.setCurrent(text1);
+                stemmer.stem();
+                CleanText.add(stemmer.getCurrent());
             }
-        }
-
-        //apply stemming
-        englishStemmer stemmer = new englishStemmer();
-        for (int i = 0; i < CleanText.size(); i++) {
-            stemmer.setCurrent(CleanText.get(i));
-            stemmer.stem();
-            CleanText.set(i, stemmer.getCurrent());
         }
         return CleanText;
     }

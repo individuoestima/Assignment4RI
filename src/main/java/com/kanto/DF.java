@@ -10,7 +10,7 @@ package com.kanto;/*
  */
 class DF {
     private int check;
-    private int df;
+    private double df;
 
     public DF(int c) {
         this.check = c;
@@ -18,7 +18,7 @@ class DF {
     }
 
     public void incDf() {
-        this.df += 1;
+        this.df += 1.0;
     }
 
     public int getCheck() {
@@ -29,11 +29,11 @@ class DF {
         this.check = check;
     }
 
-    public int getDf() {
+    public double getDf() {
         return df;
     }
 
-    public void setDf(int df) {
+    public void setDf(double df) {
         this.df = df;
     }
 

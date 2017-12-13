@@ -17,9 +17,8 @@ public class RankedRetrieval {
     private HashMap<Integer, Double> score;
     private int total;
 
-    public RankedRetrieval(int t) {
+    public RankedRetrieval() {
         this.score = new HashMap<>();
-        this.total = t;
     }
 
     public HashMap<Integer, Double> getScore() {
@@ -45,7 +44,7 @@ public class RankedRetrieval {
             if (!df.containsKey(entry.getKey())) {
                 entry.setValue(0.0);
             } else {
-                entry.setValue((1 + Math.log10(entry.getValue())) * Math.log10(this.total / df.get(entry.getKey()).getDf()));
+                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()).getDf());//Math.log10(this.total / df.get(entry.getKey()).getDf()));
                 sum += entry.getValue() * entry.getValue();
             }
         }
@@ -90,7 +89,7 @@ public class RankedRetrieval {
             if (!df.containsKey(entry.getKey())) {
                 entry.setValue(0.0);
             } else {
-                entry.setValue((1 + Math.log10(entry.getValue())) * Math.log10(this.total / df.get(entry.getKey()).getDf()));
+                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()).getDf());
                 sum += entry.getValue() * entry.getValue();
             }
         }
