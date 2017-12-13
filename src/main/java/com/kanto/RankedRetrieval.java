@@ -25,7 +25,7 @@ public class RankedRetrieval {
         return score;
     }
 
-    public void ranking(HashMap<String, Data> map, ArrayList<String> text, HashMap<String, DF> df) {
+    public void ranking(HashMap<String, Data> map, ArrayList<String> text, HashMap<String, Double> df) {
         //get ranking of each document
 
         //process query, get TF
@@ -44,7 +44,7 @@ public class RankedRetrieval {
             if (!df.containsKey(entry.getKey())) {
                 entry.setValue(0.0);
             } else {
-                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()).getDf());//Math.log10(this.total / df.get(entry.getKey()).getDf()));
+                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()));//Math.log10(this.total / df.get(entry.getKey()).getDf()));
                 sum += entry.getValue() * entry.getValue();
             }
         }
@@ -70,7 +70,7 @@ public class RankedRetrieval {
     }
 
 
-    public void rocchioFeedback(HashMap<String, Data> map, ArrayList<String> text, HashMap<String, DF> df, ArrayList<Integer> relevant, ArrayList<Integer> nonRelevant, boolean flag, HashMap<Integer, Data> relevanceScores, int idQuery) {
+    public void rocchioFeedback(HashMap<String, Data> map, ArrayList<String> text, HashMap<String, Double> df, ArrayList<Integer> relevant, ArrayList<Integer> nonRelevant, boolean flag, HashMap<Integer, Data> relevanceScores, int idQuery) {
         //get ranking of each document with roochio feedback
         score.clear();
         //process query, get TF
@@ -89,7 +89,7 @@ public class RankedRetrieval {
             if (!df.containsKey(entry.getKey())) {
                 entry.setValue(0.0);
             } else {
-                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()).getDf());
+                entry.setValue((1 + Math.log10(entry.getValue())) * df.get(entry.getKey()));
                 sum += entry.getValue() * entry.getValue();
             }
         }
@@ -110,7 +110,7 @@ public class RankedRetrieval {
             for (HashMap.Entry<String, Double> entry : temp.entrySet()) {
                 if (map.containsKey(entry.getKey())) {
                     if (map.get(entry.getKey()).getInfo().containsKey(relevant.get(i))) {
-                        //for each score we have diferent beta's.
+                        //for each score we have diferent beta's if using explicit relevance feedback
                         if (flag == true) {
                             beta = 1 / relevanceScores.get(idQuery).getInfo().get(relevant.get(i));
                         } else {
@@ -146,7 +146,7 @@ public class RankedRetrieval {
         //sort heavier
         top.sort((o1, o2) -> o2.getWeight().compareTo(o1.getWeight()));
 
-        //Add heavier terms to query
+        //Add heavier terms to query if term already in there just increase the weight
         for (int i = 0; i < top.size(); i++) {
             if (!temp.containsKey(top.get(i).getWord())) {
                 temp.put((top.get(i).getWord()), top.get(i).getWeight());

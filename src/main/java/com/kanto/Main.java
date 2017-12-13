@@ -42,7 +42,7 @@ public class Main {
         }
     }
 
-    public static void readFiles(File[] listOfFiles, HashMap<String, Data> map, HashMap<String, DF> df, MightyTokenizer mt) throws IOException {
+    public static void readFiles(File[] listOfFiles, HashMap<String, Data> map, HashMap<String, Double> df, MightyTokenizer mt) throws IOException {
         ArrayList<String> text = null;
         CorpusReader cr = new CorpusReader();
         Arrays.sort(listOfFiles);
@@ -54,16 +54,6 @@ public class Main {
             for (int j = 0; j < text.size(); j++) {
                 //get word
                 String textaux = text.get(j);
-                //obtain df of each term
-                /*if (!df.containsKey(textaux)) {
-                    DF var = new DF(i);
-                    df.put(textaux, var);
-                } else {
-                    if (i != df.get(textaux).getCheck()) {
-                        df.get(textaux).setCheck(i);
-                        df.get(textaux).incDf();
-                    }
-                }*/
                 //insert into hashmap occurrences
                 if (!temp.containsKey(textaux)) {
                     Data d = new Data();
@@ -74,7 +64,9 @@ public class Main {
                     temp.get(textaux).addInfo(i + 1);
                 }
             }
+            /*for (HashMap.Entry<String, Data> entry : temp.entrySet()) {
 
+            }*/
 
 
             //calculate tf
@@ -83,6 +75,12 @@ public class Main {
                 for (HashMap.Entry<Integer, Double> entries : entry.getValue().getInfo().entrySet()) {
                     entry.getValue().getInfo().put(entries.getKey(), (1 + Math.log10(entries.getValue())));
                     sum += entries.getValue() * entries.getValue();
+                }
+                if(!df.containsKey(entry.getKey())){
+                    df.put(entry.getKey(),1.0);
+                }
+                else{
+                    df.put(entry.getKey(),df.get(entry.getKey()) + 1.0);
                 }
             }
             sum = Math.sqrt(sum);
@@ -119,7 +117,7 @@ public class Main {
 
     }
 
-    public static void readIndex(HashMap<String, Data> map, HashMap<String, DF> df) throws IOException {
+    public static void readIndex(HashMap<String, Data> map, HashMap<String, Double> df) throws IOException {
         //Read index file
         FileReader fr = new FileReader("index");
         BufferedReader br = new BufferedReader(fr);
@@ -132,10 +130,8 @@ public class Main {
                 String[] values = t[i].split(":");
                 d.getInfo().put(Integer.parseInt(values[0]), Double.parseDouble(values[1]));
             }
-            DF var = new DF(0);
-            var.setDf(t.length - 1);
-            //insert into hashmap both the com.kanto.DF and weights of each term
-            df.put(t[0], var);
+            //insert into hashmap df
+            df.put(t[0], (double)t.length-1);
             map.put(t[0], d);
         }
     }
@@ -160,7 +156,7 @@ public class Main {
         }
     }
 
-    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> ranking, Word2Vec vec) throws IOException {
+    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> ranking, Word2Vec vec) throws IOException {
         //Rank queries
         FileReader fr = new FileReader(fQuery);
         BufferedReader br = new BufferedReader(fr);
@@ -171,12 +167,12 @@ public class Main {
             ArrayList<String> text = mt.remove(line);
             RankedRetrieval r = new RankedRetrieval();
             //expand query
-            /*Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            Collection<String> lst = vec.wordsNearest(text.get(0),3);
             for (int i = 1;i<text.size();i++){
                 lst.addAll(vec.wordsNearest(text.get(i),3));
             }
             text.addAll(lst);
-            lst.clear();*/
+            lst.clear();
             //get ranking based on tf-idf ranked retrieval method
             r.ranking(map, text, df);
             //insert into hashmap
@@ -195,7 +191,7 @@ public class Main {
         return documents;
     }
 
-    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, DF> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec) throws IOException {
+    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec) throws IOException {
 
         //Rerank queries
         FileReader fr = new FileReader(fQuery);
@@ -225,21 +221,22 @@ public class Main {
                 nonRelevant.clear();
             }
             //expand query
-            /*Collection<String> lst = vec.wordsNearest(text.get(0),3);
+            Collection<String> lst = vec.wordsNearest(text.get(0),3);
             for (int i = 1;i<text.size();i++){
                 lst.addAll(vec.wordsNearest(text.get(i),3));
             }
             text.addAll(lst);
-            lst.clear();*/
+            lst.clear();
             //recalculate ranking with the feedback we have
             r.rocchioFeedback(map, text, df, Relevant, nonRelevant, flag, relevanceScores, idQuery);
             idQuery += 1;
         }
     }
 
-    private static void calculateIDF(HashMap<String, Data> map, HashMap<String, DF> df, int total) {
+    private static void calculateIDF(HashMap<String, Data> map, HashMap<String, Double> df, int total) {
         for (HashMap.Entry<String,Data> entry : map.entrySet()){
-            df.get(entry.getKey()).setDf(Math.log10(total / df.get(entry.getKey()).getDf()));
+            //df.get(entry.getKey()).setDf(Math.log10(total / df.get(entry.getKey()).getDf()));
+            df.put(entry.getKey(),Math.log10(total/df.get(entry.getKey())));
         }
     }
 
@@ -277,7 +274,7 @@ public class Main {
         MightyTokenizer mt = new MightyTokenizer(pathstop);
 
         HashMap<String, Data> map = new HashMap<>();
-        HashMap<String, DF> df = new HashMap<>();
+        HashMap<String, Double> df = new HashMap<>();
 
         File folder = new File(pathfiles);
         File[] listOfFiles = folder.listFiles();
@@ -325,7 +322,8 @@ public class Main {
 
         //get feedback and recalculate scores based on it
         Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec);
-
+        evaluation e = new evaluation();
+        e.calculateNDCG(ranking,relevanceScores);
         toFile(ranking, args[3]);
     }
 }
