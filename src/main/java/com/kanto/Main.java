@@ -189,46 +189,9 @@ public class Main {
         return documents;
     }
 
-    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec, LinkedHashMap<Integer, ArrayList<String>> queries) throws IOException {
+    public static void Rocchio(boolean flag, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec, LinkedHashMap<Integer, ArrayList<String>> queries) throws IOException {
 
         //Rerank queries
-        /*FileReader fr = new FileReader(fQuery);
-        BufferedReader br = new BufferedReader(fr);
-        String line;
-        int idQuery = 1;
-        //read query
-        while ((line = br.readLine()) != null) {
-            ArrayList<String> text = mt.remove(line);
-            RankedRetrieval r = rank.get(idQuery);
-            ArrayList<Integer> Relevant = new ArrayList<>();
-            ArrayList<Integer> nonRelevant = new ArrayList<>();
-            //get first 10 ranking documents
-            ArrayList<Integer> docs = getFirst10(rank.get(idQuery).getScore());
-            if (flag == true) {
-                //explicit
-                for (int i = 0; i < docs.size(); i++) {
-                    if (relevanceScores.get(idQuery).getInfo().containsKey(docs.get(i))) {
-                        Relevant.add(docs.get(i));
-                    } else {
-                        nonRelevant.add(docs.get(i));
-                    }
-                }
-            } else {
-                //implicit
-                Relevant = docs;
-                nonRelevant.clear();
-            }
-            //expand query
-            Collection<String> lst = vec.wordsNearest(text.get(0),3);
-            for (int i = 1;i<text.size();i++){
-                lst.addAll(vec.wordsNearest(text.get(i),3));
-            }
-            text.addAll(lst);
-            lst.clear();
-            //recalculate ranking with the feedback we have
-            r.rocchioFeedback(map, text, df, Relevant, nonRelevant, flag, relevanceScores, idQuery);
-            idQuery += 1;
-        }*/
         for (Map.Entry<Integer,ArrayList<String>> entry : queries.entrySet()){
             RankedRetrieval r = rank.get(entry.getKey());
             ArrayList<Integer> Relevant = new ArrayList<>();
@@ -342,7 +305,7 @@ public class Main {
         LinkedHashMap<Integer,ArrayList<String>> queries = new LinkedHashMap<>();
         rankQ(fQuery, mt, map, df, ranking,vec,queries);
         //get feedback and recalculate scores based on it
-        Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec,queries);
+        Rocchio(flag, map, df, ranking, relevanceScores,vec,queries);
         evaluation e = new evaluation();
         e.calculateNDCG(ranking,relevanceScores);
         toFile(ranking, args[3]);
