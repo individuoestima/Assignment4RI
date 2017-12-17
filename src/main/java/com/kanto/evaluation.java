@@ -63,8 +63,8 @@ public class evaluation {
                 perfect = perfect + (realRel(entries.get(i).getValue())/log2(i+1));
             }
         }
-        System.out.println(dcg);
-        System.out.println(perfect);
+        /*System.out.println(dcg);
+        System.out.println(perfect);*/
         dcg = dcg/225;
         perfect = perfect/225;
         System.out.println(dcg/perfect);

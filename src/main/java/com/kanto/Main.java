@@ -42,7 +42,7 @@ public class Main {
         }
     }
 
-    public static void readFiles(File[] listOfFiles, HashMap<String, Data> map, HashMap<String, Double> df, MightyTokenizer mt) throws IOException {
+    public static void readFiles(File[] listOfFiles, HashMap<String, Data> map, HashMap<String, Double> df, MightyTokenizer mt,String file) throws IOException {
         ArrayList<String> text = null;
         CorpusReader cr = new CorpusReader();
         Arrays.sort(listOfFiles);
@@ -64,10 +64,6 @@ public class Main {
                     temp.get(textaux).addInfo(i + 1);
                 }
             }
-            /*for (HashMap.Entry<String, Data> entry : temp.entrySet()) {
-
-            }*/
-
 
             //calculate tf
             double sum = 0;
@@ -76,6 +72,7 @@ public class Main {
                     entry.getValue().getInfo().put(entries.getKey(), (1 + Math.log10(entries.getValue())));
                     sum += entries.getValue() * entries.getValue();
                 }
+                //Obtain df
                 if(!df.containsKey(entry.getKey())){
                     df.put(entry.getKey(),1.0);
                 }
@@ -101,7 +98,7 @@ public class Main {
 
         //write to index file
         try {
-            PrintWriter writer = new PrintWriter("index", "UTF-8");
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
             for (HashMap.Entry<String, Data> entry : map.entrySet()) {
                 writer.print(entry.getKey());
                 HashMap<Integer, Double> x = entry.getValue().getInfo();
@@ -117,9 +114,9 @@ public class Main {
 
     }
 
-    public static void readIndex(HashMap<String, Data> map, HashMap<String, Double> df) throws IOException {
+    public static void readIndex(HashMap<String, Data> map, HashMap<String, Double> df,String file) throws IOException {
         //Read index file
-        FileReader fr = new FileReader("index");
+        FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         String line;
         while ((line = br.readLine()) != null) {
@@ -156,7 +153,7 @@ public class Main {
         }
     }
 
-    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> ranking, Word2Vec vec) throws IOException {
+    public static void rankQ(File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> ranking, Word2Vec vec, LinkedHashMap<Integer, ArrayList<String>> queries) throws IOException {
         //Rank queries
         FileReader fr = new FileReader(fQuery);
         BufferedReader br = new BufferedReader(fr);
@@ -173,6 +170,7 @@ public class Main {
             }
             text.addAll(lst);
             lst.clear();
+            queries.put(idQuery,text);
             //get ranking based on tf-idf ranked retrieval method
             r.ranking(map, text, df);
             //insert into hashmap
@@ -191,10 +189,10 @@ public class Main {
         return documents;
     }
 
-    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec) throws IOException {
+    public static void Rocchio(boolean flag, File fQuery, MightyTokenizer mt, HashMap<String, Data> map, HashMap<String, Double> df, HashMap<Integer, RankedRetrieval> rank, HashMap<Integer, Data> relevanceScores, Word2Vec vec, LinkedHashMap<Integer, ArrayList<String>> queries) throws IOException {
 
         //Rerank queries
-        FileReader fr = new FileReader(fQuery);
+        /*FileReader fr = new FileReader(fQuery);
         BufferedReader br = new BufferedReader(fr);
         String line;
         int idQuery = 1;
@@ -230,6 +228,28 @@ public class Main {
             //recalculate ranking with the feedback we have
             r.rocchioFeedback(map, text, df, Relevant, nonRelevant, flag, relevanceScores, idQuery);
             idQuery += 1;
+        }*/
+        for (Map.Entry<Integer,ArrayList<String>> entry : queries.entrySet()){
+            RankedRetrieval r = rank.get(entry.getKey());
+            ArrayList<Integer> Relevant = new ArrayList<>();
+            ArrayList<Integer> nonRelevant = new ArrayList<>();
+            //get first 10 ranking documents
+            ArrayList<Integer> docs = getFirst10(rank.get(entry.getKey()).getScore());
+            if (flag == true) {
+                //explicit
+                for (int i = 0; i < docs.size(); i++) {
+                    if (relevanceScores.get(entry.getKey()).getInfo().containsKey(docs.get(i))) {
+                        Relevant.add(docs.get(i));
+                    } else {
+                        nonRelevant.add(docs.get(i));
+                    }
+                }
+            } else {
+                //implicit
+                Relevant = docs;
+                nonRelevant.clear();
+            }
+            r.rocchioFeedback(map, entry.getValue(), df, Relevant, nonRelevant, flag, relevanceScores, entry.getKey());
         }
     }
 
@@ -241,7 +261,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 5) {
+        if (args.length != 8) {
             System.out.println("Não incluiste todos os argumentos!");
             System.exit(0);
         }
@@ -279,16 +299,16 @@ public class Main {
         File folder = new File(pathfiles);
         File[] listOfFiles = folder.listFiles();
 
-        if (!(new File("index").exists())) {
+        if (!(new File(args[5]).exists())) {
             System.out.println("Reading Files");
-            readFiles(listOfFiles, map, df, mt);
+            readFiles(listOfFiles, map, df, mt,args[5]);
             System.out.println("Done reading files!");
         } else {
             System.out.println("Reading Index File");
-            readIndex(map, df);
+            readIndex(map, df,args[5]);
             System.out.println("Done reading index!");
         }
-        File fRelevance = new File("relevance.txt");
+        File fRelevance = new File(args[6]);
         if(!fRelevance.exists()){
             System.out.println("Ficheiro de relevância não encontrado");
             System.exit(0);
@@ -296,9 +316,10 @@ public class Main {
         HashMap<Integer, Data> relevanceScores = new HashMap<>();
         readRelevance(relevanceScores, fRelevance);
 
-        String file = "cranfield_sentences.txt";
+        String file = args[7];
         if(!(new File(file).exists())){
             System.out.println("Ficheiro cranfield_sentences.txt não encontrado!");
+            System.exit(0);
         }
         SentenceIterator iter = new BasicLineIterator(file);
         TokenizerFactory t = new DefaultTokenizerFactory();
@@ -318,10 +339,10 @@ public class Main {
 
         //Rank documents for each query
         HashMap<Integer, RankedRetrieval> ranking = new HashMap<>();
-        rankQ(fQuery, mt, map, df, ranking,vec);
-
+        LinkedHashMap<Integer,ArrayList<String>> queries = new LinkedHashMap<>();
+        rankQ(fQuery, mt, map, df, ranking,vec,queries);
         //get feedback and recalculate scores based on it
-        Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec);
+        Rocchio(flag, fQuery, mt, map, df, ranking, relevanceScores,vec,queries);
         evaluation e = new evaluation();
         e.calculateNDCG(ranking,relevanceScores);
         toFile(ranking, args[3]);

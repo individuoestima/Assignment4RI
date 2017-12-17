@@ -15,7 +15,6 @@ import java.util.Map;
 public class RankedRetrieval {
 
     private HashMap<Integer, Double> score;
-    private int total;
 
     public RankedRetrieval() {
         this.score = new HashMap<>();
