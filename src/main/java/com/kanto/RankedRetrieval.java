@@ -55,6 +55,7 @@ public class RankedRetrieval {
 
         //get score
         for (String text1 : text) {
+            //words that exist in query but don't exist in documents
             if (!map.containsKey(text1)) {
                 continue;
             }
@@ -160,6 +161,7 @@ public class RankedRetrieval {
 
         //get score
         for (String text1 : text) {
+            //words that exist in query but don't exist in documents
             if (!map.containsKey(text1)) {
                 continue;
             }

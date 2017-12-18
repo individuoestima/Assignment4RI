@@ -7,6 +7,7 @@ package com.kanto;/*
 import java.io.*;
 import java.util.*;
 
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
 import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
@@ -224,7 +225,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 8) {
+        if (args.length != 9) {
             System.out.println("Não incluiste todos os argumentos!");
             System.exit(0);
         }
@@ -281,22 +282,33 @@ public class Main {
 
         String file = args[7];
         if(!(new File(file).exists())){
-            System.out.println("Ficheiro cranfield_sentences.txt não encontrado!");
+            System.out.println("Ficheiro das frases da coleção de textos não encontrado!");
             System.exit(0);
         }
-        SentenceIterator iter = new BasicLineIterator(file);
-        TokenizerFactory t = new DefaultTokenizerFactory();
-        t.setTokenPreProcessor(new CommonPreprocessor());
-        Word2Vec vec = new Word2Vec.Builder()
-                .minWordFrequency(5)
-                .iterations(1)
-                .layerSize(100)
-                .seed(42)
-                .windowSize(5)
-                .iterate(iter)
-                .tokenizerFactory(t)
-                .build();
-        vec.fit();
+
+        Word2Vec vec;
+
+        if(!(new File(args[8]).exists())){
+            System.out.println("Creating model");
+            SentenceIterator iter = new BasicLineIterator(file);
+            TokenizerFactory t = new DefaultTokenizerFactory();
+            t.setTokenPreProcessor(new CommonPreprocessor());
+            vec = new Word2Vec.Builder()
+                    .minWordFrequency(5)
+                    .iterations(1)
+                    .layerSize(100)
+                    .seed(42)
+                    .windowSize(5)
+                    .iterate(iter)
+                    .tokenizerFactory(t)
+                    .build();
+            vec.fit();
+            WordVectorSerializer.writeWord2VecModel(vec, args[8]);
+        }
+        else{
+            System.out.println("Reading model");
+            vec = WordVectorSerializer.readWord2VecModel(args[8]);
+        }
 
         calculateIDF(map,df,listOfFiles.length);
 
