@@ -272,6 +272,9 @@ public class Main {
             readIndex(map, df,args[5]);
             System.out.println("Done reading index!");
         }
+
+        calculateIDF(map,df,listOfFiles.length);
+
         File fRelevance = new File(args[6]);
         if(!fRelevance.exists()){
             System.out.println("Ficheiro de relevância não encontrado");
@@ -309,8 +312,6 @@ public class Main {
             System.out.println("Reading model");
             vec = WordVectorSerializer.readWord2VecModel(args[8]);
         }
-
-        calculateIDF(map,df,listOfFiles.length);
 
         //Rank documents for each query
         HashMap<Integer, RankedRetrieval> ranking = new HashMap<>();
