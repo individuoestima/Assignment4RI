@@ -103,9 +103,6 @@ public class RankedRetrieval {
         //ROCCHIO FEEDBACK
 
         //In class ,alpha = 1, so we did not added it here.
-        double beta;
-        double sigma = 0.1;
-
 
         HashMap<String, Double> TermsForRocchioPositives = new HashMap<>();
         HashMap<String, Double> TermsForRocchioNegatives = new HashMap<>();
@@ -113,19 +110,14 @@ public class RankedRetrieval {
         //get all terms in the relevant documents and calculate final value
         for(int i = 0 ; i<relevant.size();i++){
             for (HashMap.Entry<String, Data> entry : map.entrySet()) {
-                if (flag == true) {
-                    beta = 1 / relevanceScores.get(idQuery).getInfo().get(relevant.get(i));
-                } else {
-                    beta = 0.75;
-                }
                 if(!TermsForRocchioPositives.containsKey(entry.getKey())){
                     if(entry.getValue().getInfo().containsKey(relevant.get(i))){
-                        TermsForRocchioPositives.put(entry.getKey(),beta *entry.getValue().getInfo().get(relevant.get(i)));
+                        TermsForRocchioPositives.put(entry.getKey(),entry.getValue().getInfo().get(relevant.get(i)));
                     }
                 }
                 else{
                     if(entry.getValue().getInfo().containsKey(relevant.get(i))) {
-                        TermsForRocchioPositives.put(entry.getKey(), TermsForRocchioPositives.get(entry.getKey()) + (beta * entry.getValue().getInfo().get(relevant.get(i))));
+                        TermsForRocchioPositives.put(entry.getKey(), TermsForRocchioPositives.get(entry.getKey()) + entry.getValue().getInfo().get(relevant.get(i)));
                     }
                 }
             }
@@ -136,12 +128,12 @@ public class RankedRetrieval {
             for (HashMap.Entry<String, Data> entry : map.entrySet()) {
                 if(!TermsForRocchioNegatives.containsKey(entry.getKey())){
                     if(entry.getValue().getInfo().containsKey(nonRelevant.get(i))){
-                        TermsForRocchioNegatives.put(entry.getKey(),sigma * entry.getValue().getInfo().get(nonRelevant.get(i)));
+                        TermsForRocchioNegatives.put(entry.getKey(),entry.getValue().getInfo().get(nonRelevant.get(i)));
                     }
                 }
                 else{
                     if(entry.getValue().getInfo().containsKey(nonRelevant.get(i))) {
-                        TermsForRocchioNegatives.put(entry.getKey(), TermsForRocchioNegatives.get(entry.getKey()) + (sigma * entry.getValue().getInfo().get(nonRelevant.get(i))));
+                        TermsForRocchioNegatives.put(entry.getKey(), TermsForRocchioNegatives.get(entry.getKey()) +entry.getValue().getInfo().get(nonRelevant.get(i)));
                     }
                 }
             }
@@ -154,33 +146,35 @@ public class RankedRetrieval {
 
         List<Map.Entry<String, Double>> negativeTerms = new ArrayList(TermsForRocchioNegatives.entrySet());
         negativeTerms.sort((o1,o2)->o2.getValue().compareTo(o1.getValue()));
+        double beta=0.75/relevant.size();
+        double sigma = 0.25/nonRelevant.size();
+        //Add relevant to query, heaviest 5 terms, previously calculated we just need to add it
 
-        //Add relevant to query, heaviest 3 terms, previously calculated we just need to add it
         for(int i = 0 ;i<positiveTerms.size();i++){
             if(!temp.containsKey(positiveTerms.get(i).getKey())){
-                temp.put(positiveTerms.get(i).getKey(),positiveTerms.get(i).getValue()/relevant.size());
+                temp.put(positiveTerms.get(i).getKey(),positiveTerms.get(i).getValue() * beta);
 
             }
             else{
-                temp.put(positiveTerms.get(i).getKey(),temp.get(positiveTerms.get(i).getKey()) + positiveTerms.get(i).getValue()/relevant.size());
+                temp.put(positiveTerms.get(i).getKey(),temp.get(positiveTerms.get(i).getKey()) + (positiveTerms.get(i).getValue() * beta));
 
             }
-            if(i == 3){
+            if(i == 4){
                 break;
             }
         }
 
-        //Add non relevant to query, heaviest 3 terms previously calculated we just need to add it
+        //Add non relevant to query, heaviest 5 terms previously calculated we just need to add it
         for(int i = 0 ;i<negativeTerms.size();i++){
             if(!temp.containsKey(negativeTerms.get(i).getKey())){
-                temp.put(negativeTerms.get(i).getKey(),-negativeTerms.get(i).getValue()/nonRelevant.size());
+                temp.put(negativeTerms.get(i).getKey(),-negativeTerms.get(i).getValue()*sigma);
 
             }
             else{
-                temp.put(negativeTerms.get(i).getKey(),temp.get(negativeTerms.get(i).getKey()) -negativeTerms.get(i).getValue()/nonRelevant.size());
+                temp.put(negativeTerms.get(i).getKey(),temp.get(negativeTerms.get(i).getKey()) -(negativeTerms.get(i).getValue()*sigma));
 
             }
-            if(i == 3){
+            if(i == 4){
                 break;
             }
         }
